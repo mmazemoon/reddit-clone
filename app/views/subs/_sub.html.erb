@@ -1,3 +1,6 @@
-<h1><%= sub.title %> thread!</h1>
+<h3><%= link_to "#{sub.title}", sub_url(sub) %></h3>
+<% if is_moderator?(sub) %>
+  <%= button_to "Edit", edit_sub_url(sub), method: :get %>
+<% end %>
 
 <%= sub.description %>

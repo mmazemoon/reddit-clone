@@ -1,6 +1,10 @@
 class SubsController < ApplicationController
+
+  before_action :ensure_moderator, only: [:edit, :update]
+
   def index
     @subs = Sub.all
+    render :index
   end
 
   def new
@@ -19,12 +23,19 @@ class SubsController < ApplicationController
     end
   end
 
-  # Write an edit route where the moderator is allowed to update the title and description. Use a before_action to prohibit non-moderators from editing or updating the Sub.
-
   def edit
+    @sub = Sub.find(params[:id])
   end
 
   def update
+    @sub = Sub.find(params[:id])
+
+    if @sub.update(sub_params)
+      redirect_to sub_url(@sub)
+    else
+      flash.now[:errors] = @sub.errors.full_messages
+      render :edit
+    end
   end
 
   def show
@@ -35,6 +46,13 @@ class SubsController < ApplicationController
 
   def sub_params
     params.require(:sub).permit(:title, :description)
+  end
+
+  def ensure_moderator
+    sub_topic = Sub.find(params[:id])
+    unless current_user.id == sub_topic.moderator.id
+      redirect_to subs_url
+    end
   end
 
 end
