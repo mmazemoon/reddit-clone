@@ -1,3 +1,6 @@
 <%= render @sub %>
+<%= render @posts %>
 
+<%= button_to "Create a new post!", new_sub_post_url(@sub), method: :get %>
+<br>
 <%= button_to "Back to all Subs", subs_url, method: :get %>
