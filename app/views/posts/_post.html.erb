@@ -1,4 +1,14 @@
 <h5><%= post.title %></h5>
-<%= post.url %>
-<%= post.author.username %>
-<small><%= time_ago_in_words(post.created_at) %></small>
+
+<% unless post.url.blank? %>
+  <ul>
+    <li><a href="http://<%= post.url %>">Link</a></li>
+  </ul>
+<% end %>
+
+<% if is_author?(post) %>
+  <%= button_to "Edit", edit_sub_post_url(sub_id: post.sub_id, id: post.id), method: :get %>
+<% end %>
+
+  <%= post.author.username %> -
+  <small><%= time_ago_in_words(post.created_at) %></small>

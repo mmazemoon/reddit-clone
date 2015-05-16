@@ -1,4 +1,6 @@
 class PostsController < ApplicationController
+  before_action :ensure_author, only: [:edit, :update]
+
   def show
     @post = Post.find(params[:id])
   end
@@ -39,6 +41,12 @@ class PostsController < ApplicationController
 
   def post_params
     params.require(:post).permit(:title, :url, :content)
+  end
+
+  def ensure_author
+    unless current_user.id == Post.find(params[:id]).author_id
+      redirect_to subs_url
+    end
   end
 
 end
